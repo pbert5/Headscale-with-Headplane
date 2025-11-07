@@ -58,7 +58,7 @@ services:
       BASE_PATH: '/admin'                             # lets UI live under /admin
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.headplane.rule=Host(`640-0-compute-tenrec-bearded.ts.net`) && PathPrefix(`/admin`)"
+      - "traefik.http.routers.headplane.rule=Host(`640-0-compute.tenrec-bearded.ts.net`) && PathPrefix(`/admin`)"
       
       ## Replace the above line with this to limit access to Headplane using Tailnet DNS ** This is not truly secure **\
       #- "traefik.http.routers.headplane.rule=Host(`headscale.yourdomain.internal`) && PathPrefix(`/admin`)"

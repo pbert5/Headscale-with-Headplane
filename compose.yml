@@ -3,7 +3,7 @@ services:
     image: 'headscale/headscale:latest-debug'
     container_name: 'headscale'
     restart: 'unless-stopped'
-    command: "serve && /scripts/init-headscale.sh"
+    entrypoint: ["/busybox/sh", "/scripts/init-headscale.sh"]
     volumes:
       - './data:/var/lib/headscale'
       - './configs/headscale:/etc/headscale'
@@ -25,13 +25,17 @@ services:
 
   headplane:
     container_name: headplane
-    image: ghcr.io/tale/headplane:latest
+    image: ghcr.io/tale/headplane:latest-shell
     restart: unless-stopped
+    depends_on:
+      - headscale
+    entrypoint: ["/bin/sh", "/scripts/wait-for-apikey.sh"]
     volumes:
       - './data:/var/lib/headscale'
       - './configs/headscale:/etc/headscale'
       - './configs/headplane:/etc/headplane'
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
+      - './scripts:/scripts:ro'
     environment:
       # This is always required for Headplane to work
       COOKIE_SECRET: 'abcdefghijklmnopqrstuvwxyz'
@@ -53,7 +57,7 @@ services:
       # This NEEDS to be set with OIDC, regardless of what's in the config
       # This needs to be a very long-lived (999 day) API key used to create
       # shorter ones for OIDC and allow the OIDC functionality to work
-      # ROOT_API_KEY: 'abcdefghijklmnopqrstuvwxyz'
+      # ROOT_API_KEY will be automatically loaded from the shared data volume
     
       # These are the labels for traefik reverse proxy
       BASE_PATH: '/admin'                             # lets UI live under /admin

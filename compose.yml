@@ -1,12 +1,13 @@
 services:
   headscale:
-    image: 'headscale/headscale:latest'
+    image: 'headscale/headscale:latest-debug'
     container_name: 'headscale'
     restart: 'unless-stopped'
-    command: 'serve'
+    command: "serve && /scripts/init-headscale.sh"
     volumes:
       - './data:/var/lib/headscale'
       - './configs/headscale:/etc/headscale'
+      - './scripts:/scripts:ro'
     environment:
       TZ: 'America/Edmonton'
 

@@ -1,0 +1,4 @@
+tls:
+  certificates:
+    - certFile: /certs/640-0-compute.tenrec-bearded.ts.net.crt
+      keyFile:  /certs/640-0-compute.tenrec-bearded.ts.net.key
